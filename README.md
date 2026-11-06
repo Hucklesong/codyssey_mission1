@@ -162,3 +162,103 @@ my-ubuntu:latest     150ad5d13caf        265MB         87.6MB
 ➜  app git:(main) ✗ docker run my-ubuntu
 Hello from my container!
 ```
+
+## 포트 매핑 실습
+
+### nginx 컨테이너 실행 (포트 매핑)
+```bash
+docker run -d -p 8080:80 --name my-nginx nginx
+```
+
+**실행확인**
+```bash
+docker ps
+```
+
+```bash
+CONTAINER ID   IMAGE   COMMAND                  CREATED        STATUS        PORTS                               NAMES
+db1ebfa5a6c4   nginx   "/docker-entrypoint.…"   4 seconds ago  Up 4 seconds  0.0.0.0:8080->80/tcp, [::]:8080->80/tcp   my-nginx
+```
+
+**curl 접속 테스트**
+```bash
+curl http://localhost:8080
+```
+Welcome to nginx! HTML 응답 확인 ✅
+
+## Bind Mount 실습
+
+- 로컬 app/ 폴더를 nginx 컨테이너에 마운트
+- 명령어:
+```bash
+  docker run -d -p 8080:80 --name my-nginx \
+    -v $(pwd)/app:/usr/share/nginx/html nginx
+```
+- 결과: 로컬 파일 수정 시 컨테이너 재시작 없이 즉시 반영
+
+## 5. Docker Volume 실습
+
+### 개념
+Volume은 컨테이너가 삭제되어도 데이터가 유지되는 Docker 저장소입니다.
+DB, 로그, 설정파일 등 영구 보존이 필요한 데이터에 사용합니다.
+
+### 실습 순서
+1. Volume 생성 → 2. 컨테이너에 마운트 후 데이터 저장 → 3. 컨테이너 삭제 → 4. 새 컨테이너에서 데이터 유지 확인
+
+### 주요 명령어
+| 명령어 | 설명 |
+|---|---|
+| `docker volume create <name>` | Volume 생성 |
+| `docker volume ls` | Volume 목록 확인 |
+| `docker volume rm <name>` | Volume 삭제 |
+| `-v <volume>:<경로>` | 컨테이너에 Volume 마운트 |
+
+### 수행 로그
+
+#### Volume 생성
+```bash
+docker volume create my-volume
+my-volume
+
+docker volume ls
+DRIVER    VOLUME NAME
+local     my-volume
+```
+
+**컨테이너 마운트 후 데이터 저장**
+```bash
+docker run -it \
+  --name my-volume-test \
+  -v my-volume:/data \
+  ubuntu:22.04 \
+  bash
+
+root@abc123:/# echo "Hello, Volume!" > /data/test.txt
+root@abc123:/# cat /data/test.txt
+Hello, Volume!
+root@abc123:/# exit
+```
+
+***컨테이너 삭제 후 새 컨테이너에서 데이터 유지 확인***
+```bash
+docker rm my-volume-test
+my-volume-test
+
+docker run -it \
+  --name my-volume-test2 \
+  -v my-volume:/data \
+  ubuntu:22.04 \
+  bash
+
+root@632b6936c5cc:/# cat /data/test.txt
+Hello, Volume!
+root@632b6936c5cc:/#
+```
+
+결과
+컨테이너(my-volume-test) 삭제 후 새 컨테이너(my-volume-test2)에서
+cat /data/test.txt 실행 시 Hello, Volume! 출력 확인 ✅
+→ 컨테이너 생명주기와 무관하게 데이터가 Volume에 영구 보존됨결과
+컨테이너(my-volume-test) 삭제 후 새 컨테이너(my-volume-test2)에서
+cat /data/test.txt 실행 시 Hello, Volume! 출력 확인 ✅
+→ 컨테이너 생명주기와 무관하게 데이터가 Volume에 영구 보존됨
