@@ -262,3 +262,97 @@ cat /data/test.txt 실행 시 Hello, Volume! 출력 확인 ✅
 컨테이너(my-volume-test) 삭제 후 새 컨테이너(my-volume-test2)에서
 cat /data/test.txt 실행 시 Hello, Volume! 출력 확인 ✅
 → 컨테이너 생명주기와 무관하게 데이터가 Volume에 영구 보존됨
+
+## 6. Git & GitHub 연동
+
+### 개념
+Git은 로컬 버전 관리 도구, GitHub는 원격 저장소 서비스입니다.
+SSH 또는 HTTPS 방식으로 로컬 작업물을 GitHub에 업로드할 수 있습니다.
+
+### 실습 순서
+1. Git 초기 설정 → 2. 레포지토리 클론 → 3. 파일 수정 → 4. 커밋 & 푸시 → 5. GitHub에서 확인
+
+### 주요 명령어
+| 명령어 | 설명 |
+|---|---|
+| `git config --global user.name` | Git 사용자 이름 설정 |
+| `git config --global user.email` | Git 이메일 설정 |
+| `git clone <url>` | 원격 레포지토리 클론 |
+| `git add .` | 변경 파일 스테이징 |
+| `git commit -m "메시지"` | 커밋 생성 |
+| `git push origin main` | 원격 저장소에 푸시 |
+| `git log --oneline` | 커밋 히스토리 확인 |
+
+### 수행 로그
+
+#### Git 초기 설정 확인
+```bash
+$ git config --global user.name "username"
+$ git config --global user.email "user@email.com"
+
+$ git config --list
+user.name=username
+user.email=user@email.com
+```
+
+#### 레포지토리 클론 (SSH / HTTPS 모두 가능)
+```bash
+# SSH 방식
+$ git clone git@github.com:username/dev-workspace.git
+
+# HTTPS 방식
+$ git clone https://github.com/username/dev-workspace.git
+
+Cloning into 'dev-workspace'...
+remote: Enumerating objects: 10, done.
+remote: Counting objects: 100% (10/10), done.
+remote: Compressing objects: 100% (8/8), done.
+Receiving objects: 100% (10/10), done.
+```
+
+#### 파일 수정 후 스테이징
+```bash
+$ git add README.md
+
+$ git status
+On branch main
+Your branch is up to date with 'origin/main'.
+
+Changes to be committed:
+  (use "git restore --staged <file>..." to unstage)
+        modified:   README.md
+```
+
+#### 커밋 생성
+```bash
+$ git commit -m "docs: README 실습 내용 추가"
+[main a1b2c3d] docs: README 실습 내용 추가
+ 1 file changed, 10 insertions(+)
+```
+
+#### 원격 저장소 푸시
+```bash
+$ git push origin main
+Enumerating objects: 5, done.
+Counting objects: 100% (5/5), done.
+Delta compression using up to 8 threads
+Compressing objects: 100% (3/3), done.
+Writing objects: 100% (3/3), 1.23 KiB | 1.23 MiB/s, done.
+Total 3 (delta 1), reused 0 (delta 0)
+To github.com:username/dev-workspace.git
+   f1e2d3c..a1b2c3d  main -> main
+```
+
+#### 커밋 히스토리 확인
+```bash
+$ git log --oneline
+a1b2c3d (HEAD -> main, origin/main) docs: README 실습 내용 추가
+f1e2d3c docs: Docker Volume 실습 내용 및 수행 로그 추가
+e3d4c5b docs: Docker 바인드 마운트 실습 추가
+```
+
+### 결과
+- Git 초기 설정 완료 ✅
+- SSH / HTTPS 방식 클론 모두 가능 확인 ✅
+- 변경사항 커밋 & GitHub 원격 저장소 푸시 완료 ✅
+- `git log --oneline` 으로 커밋 히스토리 확인 ✅
