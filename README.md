@@ -15,7 +15,6 @@ dev-workspace/
 ├── app/          # 웹 서버 소스코드 및 정적 콘텐츠 (HTML/CSS 등)가 위치하는 폴더
 │   └── Dockerfile # 커스텀 웹 서버 구성을 위한 도커 빌드 설정 파일
 ├── practice/     # 기타 터미널 및 권한 실습을 위한 테스트 폴더
-├── images/       # 실습 증거 스크린샷 폴더
 └── README.md     # 프로젝트 및 환경 구축 기술 문서
 ```
 
@@ -94,7 +93,6 @@ $ service docker status
      Loaded: loaded (/usr/lib/systemd/system/docker.service; enabled; preset: enabled)
      Active: active (running) since Mon 2026-11-09 13:33:32 KST; 4h 34min ago
 ```
-*(증거 캡처는 `images/` 폴더에 별도 보관됨)*
 
 ### 4-2. hello-world 및 이미지/컨테이너 목록 확인
 
@@ -102,7 +100,7 @@ $ service docker status
 
 ```bash
 ➜  codyssey_mission1 git:(main) ✗ docker run hello-world
-docker ps -a | head -n 5
+docker ps -a
 
 Hello from Docker!
 This message shows that your installation appears to be working correctly.
