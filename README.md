@@ -203,7 +203,7 @@ nginx:latest         d1a364dc548d        141MB          141MB
 
 * **변경 사례**: 우분투 컨테이너를 실행한 뒤 내부에 `touch test.txt`로 파일을 생성해도, 원본 우분투 '이미지'에는 아무런 영향이 없습니다. 컨테이너를 삭제하면 내부에서 변경한 `test.txt`도 함께 소멸됩니다.
 
-### 5-2. Dockerfile 작성 및 빌드 (전체 로그 및 실패 사례)
+### 5-2. Dockerfile 작성 및 빌드
 
 **Dockerfile이란?**
 
@@ -288,7 +288,6 @@ $ curl -v http://localhost:8080
 <title>Welcome to nginx!</title>
 ...
 ```
-*(증거 캡처는 `images/` 폴더에 별도 보관됨)*
 
 ## 7. 데이터 영속성: Bind Mount vs Docker Volume
 
